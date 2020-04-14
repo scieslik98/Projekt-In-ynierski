@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Model;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="users")
  */
-class User extends BaseUser
+final class User extends BaseUser
 {
     /**
      * @ORM\Id
