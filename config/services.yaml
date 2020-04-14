@@ -13,6 +13,11 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+    app.login.listener:
+        class: App\EventListener\LoginListener
+        public: true
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
 
     app.form.registration:
         class: App\Form\Type\RegistrationFormType
