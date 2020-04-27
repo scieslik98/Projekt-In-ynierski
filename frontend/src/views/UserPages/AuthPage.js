@@ -9,12 +9,14 @@ import Heading from "../../components/atoms/Heading/Heading";
 import Input from "../../components/atoms/Input/Input";
 import Button from "../../components/atoms/Button/Button";
 import { authenticate as authenticateAction } from "../../actions";
+import withContext from "../../hoc/withContext";
 
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top:20px;
 `;
 
 const StyledInput = styled(Input)`
@@ -25,18 +27,22 @@ const StyledInput = styled(Input)`
 
 const StyledLink = styled(Link)`
     display: block;
-    font-weight: ${({ theme }) => theme.bold };
+    font-weight: ${({ theme }) => theme.light };
     font-size: ${({theme}) => theme.fontSize.xs };
     color: ${({theme}) => theme.black};
-    text-transform: uppercase;
-    margin: 20px 0 50px;
+    margin: 35px 0 50px;
+    text-decoration: none;
 `;
 
-const AuthPage = ({ userId, authenticate }) => (
+const StyledHeading = styled(Heading)`
+  margin: 50px 0 0;
+`;
+
+const AuthPage = ({pageContext, userId, authenticate }) => (
     <AuthTemplate>
         <Formik
-            initialValues={{username: '', password: ''}}
-            onSubmit={({username, password}) => {
+            initialValues={{username: '', password: '', password_confirmation: ''}}
+            onSubmit={({username, password, password_confirmation}) => {
                 authenticate(username, password);
             }}>
             {({ handleChange, handleBlur, values}) => {
@@ -45,7 +51,7 @@ const AuthPage = ({ userId, authenticate }) => (
                 }
                 return(
                     <>
-                    <Heading>Zaloguj się</Heading>
+                    <StyledHeading>{pageContext === 'login' ? 'Zaloguj się' : 'Rejestracja'}</StyledHeading>
                         <StyledForm>
                            <StyledInput
                                type="text"
@@ -63,14 +69,26 @@ const AuthPage = ({ userId, authenticate }) => (
                                 onBlur={handleBlur}
                                 value={values.password}
                             />
+                            { pageContext === 'register' &&
+                                <StyledInput
+                                    type="password"
+                                    name="password_confirmation"
+                                    placeholder="Powtórz hasło"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.password_confirmation}
+                                />
+                            }
                             <Button
                                 type="submit"
+                                activeColor={'main'}
+                                auth
                             >
-                                Zaloguj się
+                                {pageContext === 'login' ? 'Zaloguj się' : 'Utwórz konto'}
                             </Button>
                         </StyledForm>
-                        <StyledLink to={routes.register}>
-                            Rejestracja
+                        <StyledLink to={routes[ pageContext === 'login' ? 'register' : 'login' ]}>
+                            {pageContext === 'login' ? 'Utwórz swoje konto ➔' : 'Zaloguj się ➔'}
                         </StyledLink>
                     </>
                 )
@@ -87,4 +105,4 @@ const mapDispatchToProps = dispatch => ({
     authenticate: (username, password) => dispatch(authenticateAction(username, password)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthPage);
+export default withContext(connect(mapStateToProps, mapDispatchToProps)(AuthPage));

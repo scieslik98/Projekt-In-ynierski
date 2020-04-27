@@ -5,8 +5,7 @@ Routing.setRoutingData(fosRoutes);
 
 export const routes = {
     home: '/',
-    login: Routing.generate('app_login'),
-    login_check: Routing.generate('app_login_check'),
-    register: '/api/register',
+    login: '/login',
+    register: '/register',
     logout: '/api/logout'
 }

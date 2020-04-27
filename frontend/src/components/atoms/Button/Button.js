@@ -8,7 +8,7 @@ const Button = styled.button`
   height: 47px;
   border: none;
   border-radius: 50px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 1rem;
   text-transform: uppercase;
   
@@ -17,7 +17,12 @@ const Button = styled.button`
       background-color: ${({theme}) => theme.grey100 };
       width: 105px;
       height: 30px;
-      font-size: 0.8rem;
+  `}
+  
+   ${({auth}) =>
+    auth && css`
+     letter-spacing: .8px;
+     color:white;
   `}
   
 `;

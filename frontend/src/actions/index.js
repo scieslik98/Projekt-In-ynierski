@@ -13,7 +13,7 @@ export const authenticate = (username, password) => dispatch => {
   data.append("_password", password);
 
   return axios
-      .post('http://127.0.0.1:8000/api/user/login', data)
+      .post('http://127.0.0.1:8000/api/auth'+location.pathname, data)
       .then(payload => {
           console.log(payload);
           dispatch({ type: AUTH_SUCCESS, payload});

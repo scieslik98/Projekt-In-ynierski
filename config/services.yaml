@@ -26,5 +26,11 @@ services:
         tags:
             - { name: form.type, alias: app_user_registration }
 
-
+    app.jwt_authenticator:
+        autowire: false     # uncomment if you had autowire enabled.
+        autoconfigure: false
+        #public: false
+        parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
+        class: App\Security\JWTAuthenticator
+        arguments: ['@security.firewall.map']
 
