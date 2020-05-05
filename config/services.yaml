@@ -22,7 +22,7 @@ services:
     app.form.registration:
         class: App\Form\Type\RegistrationFormType
         arguments:
-            $class: App\Model\User
+            $class: App\Model\Auth\User
         tags:
             - { name: form.type, alias: app_user_registration }
 

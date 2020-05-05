@@ -1,7 +1,7 @@
 fos_user:
   db_driver: orm # other valid values are 'mongodb' and 'couchdb'
   firewall_name: main
-  user_class: App\Model\User
+  user_class: App\Model\Auth\User
   from_email:
     address: admin
     sender_name: webmaster@tabu.pl

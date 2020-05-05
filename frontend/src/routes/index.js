@@ -5,7 +5,11 @@ Routing.setRoutingData(fosRoutes);
 
 export const routes = {
     home: '/',
+    start: '/start',
     login: '/login',
     register: '/register',
-    logout: '/api/logout'
+    logout: '/api/logout',
+    games: '/game/lobby',
+    profile: '/account',
+    ranking: '/rank',
 }

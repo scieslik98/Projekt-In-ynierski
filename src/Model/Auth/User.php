@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace App\Model\Auth;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,6 +21,11 @@ class User extends BaseUser
     {
         parent::__construct();
         // your own logic
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
 }

@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Model\User;
+use App\Model\Auth\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -47,7 +47,6 @@ class ApiAuthController extends AbstractController
 
         $validator = Validation::createValidator();
         $constraint = new Assert\Collection(array(
-            // the keys correspond to the keys in the input array
             'username' => new Assert\Length(array('min' => 1)),
             'password' => new Assert\Length(array('min' => 1)),
             //'email' => new Assert\Email(),
@@ -57,7 +56,6 @@ class ApiAuthController extends AbstractController
             return new JsonResponse(["error" => (string)$violations], 500);
         }
 
-       // $email = $data['email'];
         $user = new User();
         $user
             ->setUsername($username)
@@ -76,7 +74,10 @@ class ApiAuthController extends AbstractController
         return new JsonResponse(
             json_encode(['id' => $user->getId()]),
             Response::HTTP_OK,
-            array('Content-type' => 'application/json')
+            array(
+                'Content-type' => 'application/json',
+                'Access-Control-Allow-Origin' => '*'
+            )
         );
     }
 
@@ -94,27 +95,23 @@ class ApiAuthController extends AbstractController
         $_password = $data["_password"];
 
 
-        $user = $this->getDoctrine()->getManager()->getRepository("App:User")
+        $user = $this->getDoctrine()->getManager()->getRepository("App:Auth\User")
             ->findOneBy(array('username' => $_username));
 
         if(!$user){
             return new Response(
                 'Username doesnt exists',
                 Response::HTTP_UNAUTHORIZED,
-                array('Content-type' => 'application/json')
+                array(
+                    'Content-type' => 'application/json',
+                    'Access-Control-Allow-Origin' => '*'
+                )
+
             );
         }
 
-       // $factory = $this->get('security.encoder_factory');
-         $factory = $this->encoderFactory;
+        $factory = $this->encoderFactory;
 
-        /*
-         * $isValid = $this->get('security.password_encoder')
-            ->isPasswordValid($user, $request->getPassword());
-        if (!$isValid) {
-            throw new BadCredentialsException();
-        }
-         * */
         $encoder = $factory->getEncoder($user);
         $salt = $user->getSalt();
 
@@ -123,7 +120,9 @@ class ApiAuthController extends AbstractController
             return new Response(
                 'Username or Password not valid.',
                 Response::HTTP_UNAUTHORIZED,
-                array('Content-type' => 'application/json')
+                array(
+                    'Content-type' => 'application/json',
+                    'Access-Control-Allow-Origin' => '*')
             );
         }
 
@@ -138,7 +137,9 @@ class ApiAuthController extends AbstractController
         return new Response(
             json_encode(['id' => $user->getId()]),
             Response::HTTP_OK,
-            array('Content-type' => 'application/json')
+            array(
+                'Content-type' => 'application/json',
+                'Access-Control-Allow-Origin' => '*')
         );
 
     }
